@@ -8,6 +8,7 @@ import GeekUniversity.Java.Lesson3HW.Stack;
 public class Graph {
     private class Vertex {
         public char label;
+        Vertex pre;
         public boolean wasVisited;
 
         public Vertex(char label) {
@@ -76,6 +77,62 @@ public class Graph {
             }
         }
         resetFlags();
+    }
+
+    private int getIndex(char c) {
+        for (int i = 0; i < vertices.length; i++) {
+            if (vertices[i].label == c)
+                return i;
+        }
+        return -1;
+    }
+
+    Stack findeShortWay (char start, char stop){
+        Stack stack = new Stack(MAX_VERTICES);
+        Queue queue = new Queue(MAX_VERTICES);
+
+        int startint =  getIndex(start);
+        int stopint = getIndex(stop);
+
+        if (startint == -1 || stopint == -1 || startint == stopint){
+            return null;
+        }
+
+        vertices[startint].wasVisited = true;
+        queue.insert(startint);
+        while (!queue.isEmpty()) {
+            int nextverticle;
+            int curentverticle = queue.remove();
+            while ((nextverticle = getUnvisitedVertex(curentverticle)) != -1) {
+                vertices[nextverticle].pre = vertices[curentverticle];
+                vertices[nextverticle].wasVisited = true;
+                if (nextverticle == stopint){
+                    break;
+                }
+                queue.insert(nextverticle);
+            }
+            if (nextverticle == stopint){
+                break;
+            }
+        }
+        if (!vertices[stopint].wasVisited) return null;
+
+        stack.push(vertices[stopint].label);
+        int temp = stopint;
+        while (vertices[temp].pre != null) {
+            for (int i = 0; i < vertices.length; i++) {
+                if (vertices[temp].pre == vertices[i]){
+                    stack.push(vertices[i].label);
+                    temp = i;
+                    break;
+                }
+            }
+            for (int j = 0; j < size; j++) {
+                vertices[j].wasVisited = false;
+                vertices[j].pre = null;
+            }
+        }
+        return stack;
     }
 
     public void widthTravers(){

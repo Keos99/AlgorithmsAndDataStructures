@@ -1,8 +1,11 @@
 package GeekUniversity.Java.Lesson7HW;
 
+import GeekUniversity.Java.Lesson3HW.Stack;
+
 public class Main {
     public static void main(String[] args) {
         Graph graph = new Graph(10);
+        Stack testWay;
         char lable = 'A';
 
         for (int i = 0; i < 10; i++) {
@@ -11,6 +14,8 @@ public class Main {
         }
 
         setEdges(graph);
+        testWay = graph.findeShortWay('A', 'J');
+
 
         //for (int i = 0; i < 10; i++) {
         //    graph.showVertex(i);
